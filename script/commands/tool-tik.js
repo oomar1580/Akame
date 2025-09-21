@@ -27,8 +27,8 @@ module.exports.run = async function({ api, event, args }) {
       })
     );
 
-    const response = await axios.get(`https://c-v1.onrender.com/tiksearch?query=${encodeURIComponent(searchQuery)}`);
-    const videos = response.data.data.videos;
+    const response = await axios.get(`https://rapido.zetsu.xyz/api/tk?search=${encodeURIComponent(searchQuery)}`);
+    const videos = response.data.data;
 
     if (!videos || videos.length === 0) {
       api.setMessageReaction("❌", initialMessageID, (err) => {}, true);
@@ -37,9 +37,9 @@ module.exports.run = async function({ api, event, args }) {
     }
 
     const videoData = videos[0];
-    const videoUrl = videoData.play;
+    const videoUrl = videoData.video_url;
 
-    const message = `✅ | نـتيجـة الـبـحـث :\n\n👤 | مـن طـرف : ${videoData.author.nickname}\n🆔 | الـمـسـتـخـدم : ${videoData.author.unique_id}\n\n📄 | الـعـنـوان: ${videoData.title}\n\n💖 | الإعـجـابـات: ${videoData.digg_count}\n🗨️ | الـتـعـلـيـقـات: ${videoData.comment_count}\n🔁 | الـمـشـاركـات: ${videoData.share_count}`;
+    const message = `✅ | نـتيجـة الـبـحـث :\n\n👤 | مـن طـرف : ${videoData.author}\n\n📄 | الـعـنـوان: ${videoData.title}\n\n💖 | الإعـجـابـات: ${videoData.likes}\n🗨️ | الـتـعـلـيـقـات: ${videoData.comments}\n🔁 | الـمـشـاركـات: ${videoData.shares}`;
 
     const filePath = path.join(__dirname, `/cache/tiktok_video.mp4`);
     const writer = fs.createWriteStream(filePath);
